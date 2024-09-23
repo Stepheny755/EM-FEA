@@ -26,9 +26,9 @@ RUN_SIM = true;
 HIDE_WINDOW = false; % only applies if SAVE_BITMAP = false
 
 %Define Simulation Default Parameters
-inputCurrent = 15;
+inputCurrent = 1.5;
 freq = 15;
-coilTurns = 308;
+coilTurns = 308/2;
 trackThickness = 8;
 copperMaterial = '20 AWG';
 trackMaterial = 'Aluminum, 6061-T6';

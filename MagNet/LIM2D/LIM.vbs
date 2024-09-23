@@ -53,7 +53,7 @@ const RUN_TRANSIENT = True            ' Run 2D simulation (Transient)'
 const RUN_MOTION = True               ' Run 2D simulation (Transient with Motion)'
 
 'Winding Setup'
-winding_configuration = "d"
+winding_configuration = "s"
 coil_core_separation_x = 0  'minimum separation between core and coil (one-sided, x-direction)'
 coil_core_separation_y = 0  'minimum separation between core and coil (one-sided, y-direction)'
 distribute_distance = 2     'distributed winding distance, in # of slots'
@@ -134,7 +134,7 @@ Call SetLocale("en-us")
 Call getDocument().setDefaultLengthUnit("Millimeters")
 Set view = getDocument().getView()
 Set app = getDocument().getApplication()
-cur_time = get_current_timestamp()
+cur_time = 123123 'get_current_timestamp()
 
 'Ids Class Setup
 Set ids_o = new ids.init()
@@ -167,12 +167,12 @@ Call make_airbox()
 Call make_track()
 Call make_core_component()
 Call make_single_side_windings()
-' Call make_single_side_coils()
-' Call make_ee_compensator()
-' Set drive = new power2.init()
-' Call setup_motion()
-' Call setup_sim()
-' Call run_sim()
+Call make_single_side_coils()
+Call make_ee_compensator()
+Set drive = new power2.init()
+Call setup_motion()
+Call setup_sim()
+Call run_sim()
 ' Call export_data(0)
 ' Call setup_parameters()
 
@@ -564,52 +564,52 @@ Function make_single_side_windings()
     params = make_single_s_winding()
   End If
 
-  ' Dim component_name
-  ' copy_keyword = " Copy#1"
-  '
-  ' winding1 = params(0)
-  ' winding2 = params(1)
-  ' winding3 = params(2)
-  ' winding4 = params(3)
-  ' numcoils = params(4)
-  ' dist = params(5)
-  '
-  ' Call getDocument().beginUndoGroup("Transform Component")
-  ' Call view.getSlice().moveInALine(-length_core/2)
-  '
-  ' For i=1 to numcoils
-  '   If(winding1<>"") Then
-  '     Call getDocument().shiftComponent(getDocument().copyComponent(Array(winding1),1),dist*i, 0, 0, 1)
-  '     copy_component = ids_o.get_copy_components()(0)
-  '     component_name = Replace(winding1,"1#1.1","1#"&(i+2)&".1")
-  '     Call getDocument().renameObject(copy_component,component_name)
-  '   End If
-  '
-  '   If(winding2<>"") Then
-  '     Call getDocument().shiftComponent(getDocument().copyComponent(Array(winding2),1),dist*i, 0, 0, 1)
-  '     copy_component = ids_o.get_copy_components()(0)
-  '     component_name = Replace(winding2,"1#1.2","1#"&(i+2)&".2")
-  '     Call getDocument().renameObject(copy_component,component_name)
-  '   End If
-  '
-  '   If(winding3<>"") Then
-  '     Call getDocument().shiftComponent(getDocument().copyComponent(Array(winding3),1),dist*i, 0, 0, 1)
-  '     copy_component = ids_o.get_copy_components()(0)
-  '     component_name = Replace(winding3,"2#1.1","2#"&(i+2)&".1")
-  '     Call getDocument().renameObject(copy_component,component_name)
-  '   End If
-  '
-  '   If(winding4<>"") Then
-  '     Call getDocument().shiftComponent(getDocument().copyComponent(Array(winding4),1),dist*i, 0, 0, 1)
-  '     copy_component = ids_o.get_copy_components()(0)
-  '     component_name = Replace(winding4,"2#1.2","2#"&(i+2)&".2")
-  '     Call getDocument().renameObject(copy_component,component_name)
-  '   End If
-  ' Next
-  '
-  ' Call getDocument().endUndoGroup()
-  ' Call view.getSlice().moveInALine(length_core/2)
-  'Call clear_construction_lines()
+  Dim component_name
+  copy_keyword = " Copy#1"
+  
+  winding1 = params(0)
+  winding2 = params(1)
+  winding3 = params(2)
+  winding4 = params(3)
+  numcoils = params(4)
+  dist = params(5)
+  
+  Call getDocument().beginUndoGroup("Transform Component")
+  Call view.getSlice().moveInALine(-length_core/2)
+  
+  For i=1 to numcoils
+    If(winding1<>"") Then
+      Call getDocument().shiftComponent(getDocument().copyComponent(Array(winding1),1),dist*i, 0, 0, 1)
+      copy_component = ids_o.get_copy_components()(0)
+      component_name = Replace(winding1,"1#1.1","1#"&(i+2)&".1")
+      Call getDocument().renameObject(copy_component,component_name)
+    End If
+  
+    If(winding2<>"") Then
+      Call getDocument().shiftComponent(getDocument().copyComponent(Array(winding2),1),dist*i, 0, 0, 1)
+      copy_component = ids_o.get_copy_components()(0)
+      component_name = Replace(winding2,"1#1.2","1#"&(i+2)&".2")
+      Call getDocument().renameObject(copy_component,component_name)
+    End If
+  
+    If(winding3<>"") Then
+      Call getDocument().shiftComponent(getDocument().copyComponent(Array(winding3),1),dist*i, 0, 0, 1)
+      copy_component = ids_o.get_copy_components()(0)
+      component_name = Replace(winding3,"2#1.1","2#"&(i+2)&".1")
+      Call getDocument().renameObject(copy_component,component_name)
+    End If
+  
+    If(winding4<>"") Then
+      Call getDocument().shiftComponent(getDocument().copyComponent(Array(winding4),1),dist*i, 0, 0, 1)
+      copy_component = ids_o.get_copy_components()(0)
+      component_name = Replace(winding4,"2#1.2","2#"&(i+2)&".2")
+      Call getDocument().renameObject(copy_component,component_name)
+    End If
+  Next
+  
+  Call getDocument().endUndoGroup()
+  Call view.getSlice().moveInALine(length_core/2)
+  ' Call clear_construction_lines()
 End Function
 
 Function make_single_side_coils()
@@ -1526,14 +1526,14 @@ Function get_global(local_x,local_y)
 End Function
 
 'Returns the current time in yyyyMMddhhmmss format'
-Function get_current_timestamp()
-  get_current_timestamp = sprintf("{0:yyyyMMddhhmmss}", Array(now()))
-End Function
+' Function get_current_timestamp()
+'   get_current_timestamp = sprintf("{0:yyyyMMddhhmmss}", Array(now()))
+' End Function
 
-'sprintf function, like in C'
-Function sprintf(sFmt, aData)
-   Set sb = CreateObject("System.Text.StringBuilder")
-   sb.AppendFormat_4 sFmt, (aData)
-   sprintf = sb.ToString()
-   sb.Length = 0
-End Function
+' 'sprintf function, like in C'
+' Function sprintf(sFmt, aData)
+'    Set sb = CreateObject("System.Text.StringBuilder")
+'    Call sb.AppendFormat_4(sFmt, (aData))
+'    sprintf = sb.ToString()
+'    sb.Length = 0
+' End Function
